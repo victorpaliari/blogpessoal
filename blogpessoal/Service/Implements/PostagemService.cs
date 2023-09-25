@@ -17,10 +17,13 @@ namespace blogpessoal.Service.Implements
             return await _context.Postagens.ToListAsync();
         }
 
+        //Método equivalente a = SELECT * FROM tb_postagens where id = id;
         public async Task<Postagem?> GetById(long id)
         {
             try
             {
+                //equivalente a instrução:
+                //SELECT * FROM tb_postagens where id = id_procurado;
                 var Postagem = await _context.Postagens.FirstAsync(i => i.Id == id);
                 return Postagem;
             }

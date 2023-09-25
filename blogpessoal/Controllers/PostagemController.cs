@@ -8,7 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace blogpessoal.Controllers 
 {
+    //[Route] - Indica o endereço Http
     [Route("~/postagens")]
+    //[ApiController] indica que a classe é do tipo Controller
     [ApiController]
     public class PostagemController : ControllerBase
     {
@@ -25,7 +27,9 @@ namespace blogpessoal.Controllers
             _postagemValidator = postagemValidator;
         }
 
-
+        //[HttpGet] é um método dentre os 4 tipos para informar para a API
+        //se vai puxar(Get), incluir(Post), alterar(Put) ou deletar(delete) algum dado do backend
+        //No caso abaixo [HttpGet] = "chama" um valor
         [HttpGet]
         public async Task<ActionResult> GetAll()
         {
@@ -34,7 +38,6 @@ namespace blogpessoal.Controllers
 
 
         //Path de caminho (id = variavel) 
-        //("{id}")
         [HttpGet("{id}")]
         public async Task<ActionResult> GetById(long id)
         {
@@ -47,12 +50,13 @@ namespace blogpessoal.Controllers
         }
 
 
-        // o que está em () é um titulo de 
+        // o que está em () é um titulo de caminho
         [HttpGet("titulo/{titulo}")]
         public async Task<ActionResult> GetByTitulo(string titulo)
         {
             return Ok(await _postagemService.GetByTitulo(titulo));
         }
+        //[HttpPost] = Cria um valor
         [HttpPost]
         public async Task<ActionResult> Create([FromBody] Postagem postagem)
         {
@@ -64,6 +68,7 @@ namespace blogpessoal.Controllers
             return CreatedAtAction(nameof(GetById), new { id = postagem.Id }, postagem);
         }
 
+        //[HttpPut] = altera um valor
         [HttpPut]
         public async Task<ActionResult> Update([FromBody] Postagem postagem)
         {
@@ -84,6 +89,7 @@ namespace blogpessoal.Controllers
             return Ok(Resposta);
         }
 
+        //[HttpDelete] = Deleta um valor, especificamente chamando pelo id
         [HttpDelete("{id}")]
         public async Task<ActionResult>Delete(long id)
         {
