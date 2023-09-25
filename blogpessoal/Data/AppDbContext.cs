@@ -14,6 +14,7 @@ namespace blogpessoal.Data
         //Registrar DbSET - Objeto responsável por criar a tabela
         public DbSet<Postagem> Postagens { get; set; } = null!;
 
+        //metodo para persistir o async
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             var insertedEntries = this.ChangeTracker.Entries()
