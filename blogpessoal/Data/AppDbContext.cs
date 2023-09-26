@@ -9,10 +9,12 @@ namespace blogpessoal.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Postagem>().ToTable("tb_postagens");
+            modelBuilder.Entity<Tema>().ToTable("tb_temas");
         }
 
         //Registrar DbSET - Objeto responsável por criar a tabela
         public DbSet<Postagem> Postagens { get; set; } = null!;
+        public DbSet<Tema> Temas { get; set; } = null!;
 
         //metodo para persistir o async
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
