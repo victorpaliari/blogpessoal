@@ -14,7 +14,9 @@ namespace blogpessoal.Service.Implements
 
         public async Task<IEnumerable<Postagem>> GetAll()
         {
-            return await _context.Postagens.ToListAsync();
+            return await _context.Postagens
+                .Include(p => p.Tema)
+                .ToListAsync();
         }
 
         //Método equivalente a = SELECT * FROM tb_postagens where id = id;
@@ -24,7 +26,9 @@ namespace blogpessoal.Service.Implements
             {
                 //equivalente a instrução:
                 //SELECT * FROM tb_postagens where id = id_procurado;
-                var Postagem = await _context.Postagens.FirstAsync(i => i.Id == id);
+                var Postagem = await _context.Postagens
+                    .Include(p => p.Tema)
+                    .FirstAsync(i => i.Id == id);
                 return Postagem;
             }
             catch
@@ -38,6 +42,7 @@ namespace blogpessoal.Service.Implements
         public async Task<IEnumerable<Postagem>> GetByTitulo(string titulo)
         {
             var Postagem = await _context.Postagens
+                .Include(p => p.Tema)
                 .Where(propa => propa.Titulo.Contains(titulo))
                 .ToListAsync();
             return Postagem;
@@ -45,6 +50,17 @@ namespace blogpessoal.Service.Implements
 
         public async Task<Postagem?> Create(Postagem postagem)
         {
+            
+            if (postagem.Tema is not null)
+            {
+                var BuscaTema = await _context.Temas.FindAsync(postagem.Tema.Id);
+
+                if (BuscaTema is null)
+                    return null;
+            }
+            
+            //procurar tema cujo id == id tema recebido atraves da requisição
+            postagem.Tema = postagem.Tema is not null ? _context.Temas.FirstOrDefault(t => t.Id == postagem.Tema.Id) : null;
             await _context.AddAsync(postagem);
             await _context.SaveChangesAsync();
 
@@ -57,7 +73,17 @@ namespace blogpessoal.Service.Implements
             if (PostagemUpdate is null) 
                 return null;
 
-            _context.Entry(PostagemUpdate).State = EntityState.Detached;
+            if (postagem.Tema is not null)
+            {
+                var BuscaTema = await _context.Temas.FindAsync(postagem.Tema.Id);
+
+                if (BuscaTema is null)
+                    return null;
+            }
+
+            postagem.Tema = postagem.Tema is not null ? _context.Temas.FirstOrDefault(t => t.Id == postagem.Tema.Id) : null;
+                
+                _context.Entry(PostagemUpdate).State = EntityState.Detached;
                 _context.Entry(postagem).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
 

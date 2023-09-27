@@ -17,6 +17,9 @@ namespace blogpessoal.Model
         [StringLength(1000)]
         public string Texto { get; set; } = string.Empty;
 
+        //chave estrangeira da tabela postagens
+        public virtual Tema? Tema { get; set; }
+
 
     }
 }

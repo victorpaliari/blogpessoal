@@ -6,6 +6,8 @@ namespace blogpessoal.Service
     {
         Task<IEnumerable<Postagem>> GetAll();
         //IEnuberable carrega todas as colections que possuem índices
+
+
         Task<Postagem?> GetById(long id);
 
         Task<IEnumerable<Postagem>> GetByTitulo(string titulo);

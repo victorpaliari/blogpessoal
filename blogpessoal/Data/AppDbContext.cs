@@ -10,6 +10,19 @@ namespace blogpessoal.Data
         {
             modelBuilder.Entity<Postagem>().ToTable("tb_postagens");
             modelBuilder.Entity<Tema>().ToTable("tb_temas");
+
+            _ = modelBuilder.Entity<Postagem>()
+              
+                //tipo da relação
+                .HasOne(_ => _.Tema)
+                //outro lado da relação
+                .WithMany(t => t.Postagem)
+                //tipo da chave
+                .HasForeignKey("TemaId")
+                //Apaga todos os filhos de um tema mãe
+                .OnDelete(DeleteBehavior.Cascade);
+                
+                
         }
 
         //Registrar DbSET - Objeto responsável por criar a tabela
