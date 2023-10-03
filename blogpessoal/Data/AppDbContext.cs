@@ -10,6 +10,7 @@ namespace blogpessoal.Data
         {
             modelBuilder.Entity<Postagem>().ToTable("tb_postagens");
             modelBuilder.Entity<Tema>().ToTable("tb_temas");
+            modelBuilder.Entity<User>().ToTable("tb_usuarios");
 
             _ = modelBuilder.Entity<Postagem>()
               
@@ -21,13 +22,26 @@ namespace blogpessoal.Data
                 .HasForeignKey("TemaId")
                 //Apaga todos os filhos de um tema mãe
                 .OnDelete(DeleteBehavior.Cascade);
-                
-                
+
+            _ = modelBuilder.Entity<Postagem>()
+
+                //tipo da relação
+                .HasOne(_ => _.Usuario)
+                //outro lado da relação
+                .WithMany(t => t.Postagem)
+                //tipo da chave
+                .HasForeignKey("UsuarioId")
+                //Apaga todos os filhos de um tema mãe
+                .OnDelete(DeleteBehavior.Cascade);
+
+
         }
 
         //Registrar DbSET - Objeto responsável por criar a tabela
         public DbSet<Postagem> Postagens { get; set; } = null!;
         public DbSet<Tema> Temas { get; set; } = null!;
+
+        public DbSet<User> Users { get; set; } = null!;
 
         //metodo para persistir o async
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

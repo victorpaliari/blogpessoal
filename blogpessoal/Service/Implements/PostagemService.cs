@@ -16,6 +16,7 @@ namespace blogpessoal.Service.Implements
         {
             return await _context.Postagens
                 .Include(p => p.Tema)
+                .Include(p => p.Usuario)
                 .ToListAsync();
         }
 
@@ -28,6 +29,7 @@ namespace blogpessoal.Service.Implements
                 //SELECT * FROM tb_postagens where id = id_procurado;
                 var Postagem = await _context.Postagens
                     .Include(p => p.Tema)
+                    .Include(p => p.Usuario)
                     .FirstAsync(i => i.Id == id);
                 return Postagem;
             }
@@ -43,6 +45,7 @@ namespace blogpessoal.Service.Implements
         {
             var Postagem = await _context.Postagens
                 .Include(p => p.Tema)
+                .Include(p => p.Usuario)
                 .Where(propa => propa.Titulo.Contains(titulo))
                 .ToListAsync();
             return Postagem;
@@ -57,10 +60,12 @@ namespace blogpessoal.Service.Implements
 
                 if (BuscaTema is null)
                     return null;
+
+                postagem.Tema = BuscaTema;
             }
             
             //procurar tema cujo id == id tema recebido atraves da requisição
-            postagem.Tema = postagem.Tema is not null ? _context.Temas.FirstOrDefault(t => t.Id == postagem.Tema.Id) : null;
+            postagem.Usuario = postagem.Usuario is not null ? _context.Users.FirstOrDefault(u => u.Id == postagem.Usuario.Id) : null;
             await _context.AddAsync(postagem);
             await _context.SaveChangesAsync();
 
@@ -81,14 +86,12 @@ namespace blogpessoal.Service.Implements
                     return null;
             }
 
-            postagem.Tema = postagem.Tema is not null ? _context.Temas.FirstOrDefault(t => t.Id == postagem.Tema.Id) : null;
-                
-                _context.Entry(PostagemUpdate).State = EntityState.Detached;
+            postagem.Usuario = postagem.Usuario is not null ? _context.Users.FirstOrDefault(u => u.Id == postagem.Usuario.Id) : null;
+            _context.Entry(PostagemUpdate).State = EntityState.Detached;
                 _context.Entry(postagem).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
 
-                return postagem;
-            
+                return postagem;           
 
         }
 

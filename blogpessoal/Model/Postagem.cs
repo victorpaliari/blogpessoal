@@ -20,6 +20,8 @@ namespace blogpessoal.Model
         //chave estrangeira da tabela postagens
         public virtual Tema? Tema { get; set; }
 
+        public virtual User? Usuario { get; set; }
+
 
     }
 }
