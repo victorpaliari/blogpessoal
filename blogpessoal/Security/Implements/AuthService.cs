@@ -18,44 +18,42 @@ namespace blogpessoal.Security.Implements
 
         public async Task<UserLogin?> Autenticar(UserLogin userLogin)
         {
-            string FotoDefault = "https://i.imgur.com/I8MfmC8.png";
+            string fotoDefault = "https://i.pinimg.com/originals/57/00/c0/5700c04197ee9a4372a35ef16eb78f4e.png";
 
-            if (userLogin is null || string.IsNullOrEmpty(userLogin.Usuario) || string.IsNullOrEmpty(userLogin.Senha));
-
-            var BuscaUser = await _userService.GetByUsuario(userLogin.Usuario);
-
-            if (BuscaUser is null)
+            if (userLogin is null || string.IsNullOrEmpty(userLogin.Usuario) || string.IsNullOrEmpty(userLogin.Senha))
                 return null;
 
-            if(!BCrypt.Net.BCrypt.Verify(userLogin.Senha, BuscaUser.Senha)) 
+            var buscaUsuario = await _userService.GetByUsuario(userLogin.Usuario);
+
+            if (buscaUsuario is null)
+                return null;
+
+            if (!BCrypt.Net.BCrypt.Verify(userLogin.Senha, buscaUsuario.Senha))
                 return null;
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenKey = Encoding.UTF8.GetBytes(Settings.Secret);
-            var tokenDescriptor = new SecurityTokenDescriptor
 
+            var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]
-                {
-                    new Claim(ClaimTypes.Name, userLogin.Usuario)
-                }),
+            {
+new Claim(ClaimTypes.Name, userLogin.Usuario)
+            }),
                 Expires = DateTime.UtcNow.AddHours(1),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256Signature)
-
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey),
+            SecurityAlgorithms.HmacSha256Signature)
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
-            userLogin.Id = BuscaUser.Id;
-            userLogin.Nome = BuscaUser.Nome;
-            userLogin.Foto = BuscaUser.Foto;
+            userLogin.Id = buscaUsuario.Id;
+            userLogin.Nome = buscaUsuario.Nome;
+            userLogin.Foto = buscaUsuario.Foto is null ? fotoDefault : buscaUsuario.Foto;
             userLogin.Token = "Bearer " + tokenHandler.WriteToken(token).ToString();
-            userLogin.Senha = string.Empty;
+            userLogin.Senha = "";
 
             return userLogin;
-
-
-            
         }
     }
 }
