@@ -109,14 +109,14 @@ namespace blogpessoal
                     Description = "Projeto Blog Pessoal - ASP.NET Core 7 - Entity Framework",
                     Contact = new OpenApiContact
                     {
-                        Name = "Generation Brasil",
-                        Email = "conteudogeneration@generation.org",
-                        Url = new Uri("https://github.com/conteudoGeneration")
+                        Name = "Victor Paliari",
+                        Email = "victorrpaliari@gmail.com",
+                        Url = new Uri("https://github.com/victorpaliari")
                     },
                     License = new OpenApiLicense
                     {
                         Name = "Github",
-                        Url = new Uri("https://github.com/conteudoGeneration")
+                        Url = new Uri("https://github.com/victorpaliari")
                     }
                 });
 
