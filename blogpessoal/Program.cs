@@ -10,6 +10,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.OpenApi.Models;
+using blogpessoal.Configuration;
+using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 
 namespace blogpessoal
 {
@@ -29,11 +32,34 @@ namespace blogpessoal
                 });
 
             // Conexão com o banco de dados
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            // Conexão com o Banco de dados
 
-            builder.Services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(connectionString)
-            );
+            if (builder.Configuration["Enviroment:Start"] == "PROD")
+            {
+                /* Conexão Remota (Nuvem) - PostgreSQL */
+
+                builder.Configuration
+                .SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("secrets.json");
+
+                var connectionString = builder.Configuration
+                    .GetConnectionString("ProdConnection");
+
+                builder.Services.AddDbContext<AppDbContext>(options =>
+                    options.UseNpgsql(connectionString)
+                );
+
+            }
+            else
+            {
+                /* Conexão Local - SQL Server */
+
+                var connectionString = builder.Configuration.
+                    GetConnectionString("DefaultConnection");
+
+                builder.Services.AddDbContext<AppDbContext>(options =>
+                    options.UseSqlServer(connectionString)
+                );
+            }
 
             //Registrar a validação das entidades
             builder.Services.AddTransient<IValidator<Postagem>, PostagemValidator>();
@@ -48,7 +74,7 @@ namespace blogpessoal
 
 
             // Adicionar a Validação do Token JWT
-			builder.Services.AddAuthentication(x =>
+            builder.Services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -69,7 +95,47 @@ namespace blogpessoal
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+
+            //Configuração das informações do desenvolvedor
+            builder.Services.AddSwaggerGen(options =>
+            {
+            options.SwaggerDoc("v1", new OpenApiInfo
+            {
+                Version = "v1",
+                Title = "Projeto Blog Pessoal",
+                Description = "Projeto Blog Pessoal - ASP.NET Core 7.0",
+                Contact = new OpenApiContact
+                {
+                    Name = "Victor Paliari",
+                    Email = "victorrpaliari@gmail.com",
+                    Url = new Uri("https://github.com/victorpaliari")
+                },
+                License = new OpenApiLicense
+                {
+                    Name = "GitHub",
+                    Url = new Uri("https://github.com/victorpaliari")
+                }
+            });
+
+                //Adicionar a Segurança no Swagger
+                options.AddSecurityDefinition("JWT", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Digite um Token JWT válido!",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    BearerFormat = "JWT",
+                    Scheme = "Bearer"
+                });
+
+                //Adicionar a configuração visual da Segurança no Swagger
+                options.OperationFilter<AuthResponsesOperationFilter>();
+
+            });
+
+
+            //Adiconar o Fluent Validation no Swagger
+            builder.Services.AddFluentValidationRulesToSwagger();
 
             // Configuração do CORS
             builder.Services.AddCors(options =>
@@ -92,12 +158,26 @@ namespace blogpessoal
                 dbContext.Database.EnsureCreated();
             }
 
+            app.UseDeveloperExceptionPage();
+
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
+            //if (app.Environment.IsDevelopment())
+            //{
+            app.UseSwagger();
+
+            // Swagger como Página Inicial (Home) na Nuvem
+            if (app.Environment.IsProduction())
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Blog Pessoal - v1");
+                    c.RoutePrefix = string.Empty;
+                });
             }
+
+            app.UseSwaggerUI();
+
+            //}
 
             // Habilitar a Autenticação e a Autorização
             app.UseAuthentication();

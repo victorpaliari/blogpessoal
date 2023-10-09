@@ -162,3 +162,11 @@ C:\Users\victo\OneDrive\Área de Trabalho\aspnet\blogpessoal\blogpessoal\blogpes
 C:\Users\victo\OneDrive\Área de Trabalho\aspnet\blogpessoal\blogpessoal\blogpessoal\obj\Debug\net7.0\blogpessoal.pdb
 C:\Users\victo\OneDrive\Área de Trabalho\aspnet\blogpessoal\blogpessoal\blogpessoal\obj\Debug\net7.0\blogpessoal.genruntimeconfig.cache
 C:\Users\victo\OneDrive\Área de Trabalho\aspnet\blogpessoal\blogpessoal\blogpessoal\obj\Debug\net7.0\ref\blogpessoal.dll
+C:\Users\Pichau\Desktop\aspnet\blogpessoal\blogpessoal\bin\Debug\net7.0\BCrypt.Net-Core.dll
+C:\Users\Pichau\Desktop\aspnet\blogpessoal\blogpessoal\bin\Debug\net7.0\MicroElements.Swashbuckle.FluentValidation.dll
+C:\Users\Pichau\Desktop\aspnet\blogpessoal\blogpessoal\bin\Debug\net7.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\Pichau\Desktop\aspnet\blogpessoal\blogpessoal\bin\Debug\net7.0\Scrutor.dll
+C:\Users\Pichau\Desktop\aspnet\blogpessoal\blogpessoal\bin\Debug\net7.0\Swashbuckle.AspNetCore.Filters.dll
+C:\Users\Pichau\Desktop\aspnet\blogpessoal\blogpessoal\bin\Debug\net7.0\Swashbuckle.AspNetCore.Filters.Abstractions.dll
+C:\Users\Pichau\Desktop\aspnet\blogpessoal\blogpessoal\bin\Debug\net7.0\Npgsql.dll
+C:\Users\Pichau\Desktop\aspnet\blogpessoal\blogpessoal\bin\Debug\net7.0\Npgsql.EntityFrameworkCore.PostgreSQL.dll
