@@ -38,7 +38,9 @@ namespace blogpessoal.Security.Implements
             {
                 Subject = new ClaimsIdentity(new Claim[]
             {
-new Claim(ClaimTypes.Name, userLogin.Usuario)
+
+                new Claim(ClaimTypes.Name, userLogin.Usuario)
+           
             }),
                 Expires = DateTime.UtcNow.AddHours(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey),

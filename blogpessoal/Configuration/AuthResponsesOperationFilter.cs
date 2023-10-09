@@ -11,8 +11,8 @@ namespace blogpessoal.Configuration
         {
             if (!context.MethodInfo.GetCustomAttributes(true)
                 .Any(options => options is AllowAnonymousAttribute))
-                {
-                    operation.Security = new List<OpenApiSecurityRequirement> {
+            {
+                operation.Security = new List<OpenApiSecurityRequirement> {
                         new OpenApiSecurityRequirement{
                             {
                                 new OpenApiSecurityScheme
@@ -24,7 +24,7 @@ namespace blogpessoal.Configuration
                                                         }, Array.Empty<string>()
                                                     }
 
-                                                        }                               
+                                                        }
                                              };
 
             }

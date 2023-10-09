@@ -42,26 +42,26 @@ namespace blogpessoal.Service.Implements
 
         public async Task<User?> GetByUsuario(string usuario)
         {
-           // try
-            //{
+            try
+            {
                 var BuscaUsuario = await _context.Users
                     .Include(u => u.Postagem)
                     .Where(u => u.Usuario == usuario)
                     .FirstOrDefaultAsync();
 
                 return BuscaUsuario;
-            //}
-            //catch
-            //{
-              //  return null;
-           // }
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         public async Task<User?> Create(User usuario)
         {
-            var BuscaUsuario = await GetByUsuario(usuario.Usuario);
+            var BuscaUser = await GetByUsuario(usuario.Usuario);
 
-            if (BuscaUsuario is not null)
+            if (BuscaUser is not null)
                 return null;
 
             if (usuario.Foto is null || usuario.Foto == "")
