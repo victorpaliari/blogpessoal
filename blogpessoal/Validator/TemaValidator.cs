@@ -5,13 +5,17 @@ namespace blogpessoal.Validator
 {
     public class TemaValidator : AbstractValidator<Tema>
     {
-        public TemaValidator() {
+        public TemaValidator()
+        {
 
             RuleFor(p => p.Descricao)
                 .NotEmpty()
                 .MinimumLength(5)
                 .MaximumLength(5000);
 
+
         }
+
+
     }
 }

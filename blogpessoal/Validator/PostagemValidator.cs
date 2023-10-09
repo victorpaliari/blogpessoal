@@ -5,19 +5,20 @@ namespace blogpessoal.Validator
 {
     public class PostagemValidator : AbstractValidator<Postagem>
     {
-        public PostagemValidator() {
+        public PostagemValidator()
+        {
 
             RuleFor(p => p.Titulo)
                 .NotEmpty()
                 .MinimumLength(5)
-                .MaximumLength(100);
+                .MaximumLength(1000);
 
             RuleFor(p => p.Texto)
-               .NotEmpty()
-               .MinimumLength(5)
-               .MaximumLength(100);
-
-
+                .NotEmpty()
+                .MinimumLength(5)
+                .MaximumLength(1000);
         }
+
+
     }
 }

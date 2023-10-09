@@ -1,17 +1,17 @@
 ﻿using blogpessoal.Data;
-using blogpessoal.Model;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 
 namespace blogpessoal.Service.Implements
 {
     public class TemaService : ITemaService
     {
         private readonly AppDbContext _context;
-    public TemaService(AppDbContext context)
-            {
-                _context = context;
-            }
 
+        public TemaService(AppDbContext context)
+        {
+            _context = context;
+        }
         public async Task<IEnumerable<Tema>> GetAll()
         {
             return await _context.Temas
@@ -19,27 +19,19 @@ namespace blogpessoal.Service.Implements
                 .ToListAsync();
         }
 
-        //Método equivalente a = SELECT * FROM tb_Temas where id = id;
         public async Task<Tema?> GetById(long id)
         {
             try
             {
-                //equivalente a instrução:
-                //SELECT * FROM tb_Temas where id = id_procurado;
-                var Tema = await _context.Temas
+                var Tema = await _context.Temas.FirstAsync(i => i.Id == id);
 
-                    .Include(t => t.Postagem)
-                    .FirstAsync(i => i.Id == id);
                 return Tema;
             }
             catch
             {
                 return null;
             }
-            
-            
-            }
-
+        }
         public async Task<IEnumerable<Tema>> GetByDescricao(string descricao)
         {
             var Tema = await _context.Temas
@@ -49,36 +41,31 @@ namespace blogpessoal.Service.Implements
             return Tema;
         }
 
-        public async Task<Tema?> Create(Tema Tema)
+        public async Task<Tema?> Update(Tema tema)
         {
+            var TemaUpdate = await _context.Temas.FindAsync(tema.Id);
 
-            await _context.AddAsync(Tema);
-            await _context.SaveChangesAsync();
-
-            return Tema;
-        }
-        public async Task<Tema?> Update(Tema Tema)
-        {
-            var TemaUpdate = await _context.Temas.FindAsync(Tema.Id);
-
-            if (TemaUpdate is null) 
+            if (TemaUpdate is null)
                 return null;
 
             _context.Entry(TemaUpdate).State = EntityState.Detached;
-                _context.Entry(Tema).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
+            _context.Entry(tema).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
 
-                return Tema;
-            
+            return tema;
 
         }
-
-        public async Task Delete(Tema Tema)
+        public async Task Delete(Tema tema)
         {
-            _context.Remove(Tema);
-
+            _context.Remove(tema);
             await _context.SaveChangesAsync();
         }
+        public async Task<Tema?> Create(Tema tema)
+        {
+            await _context.Temas.AddAsync(tema);
+            await _context.SaveChangesAsync();
 
+            return tema;
+        }
     }
 }

@@ -51,39 +51,39 @@ namespace blogpessoal.Controllers
 
         [AllowAnonymous]
         [HttpPost("cadastrar")]
-        public async Task<ActionResult> Create([FromBody] User user)
+        public async Task<ActionResult> Create([FromBody] User usuario)
         {
-            var validarUser = await _userValidator.ValidateAsync(user);
+            var validarUser = await _userValidator.ValidateAsync(usuario);
 
             if (!validarUser.IsValid)
                 return StatusCode(StatusCodes.Status400BadRequest, validarUser);
 
-            var Resposta = await _userService.Create(user);
+            var Resposta = await _userService.Create(usuario);
 
             if (Resposta is null)
                 return BadRequest("Usuário já cadastrado!");
 
-            return CreatedAtAction(nameof(GetById), new { id = user.Id }, user);
+            return CreatedAtAction(nameof(GetById), new { id = Resposta.Id }, Resposta);
         }
 
         [Authorize]
         [HttpPut("atualizar")]
-        public async Task<ActionResult> Update([FromBody] User user)
+        public async Task<ActionResult> Update([FromBody] User usuario)
         {
-            if (user.Id == 0)
+            if (usuario.Id == 0)
                 return BadRequest("O Id do Usuário é inválido!");
 
-            var validarUser = await _userValidator.ValidateAsync(user);
+            var validarUser = await _userValidator.ValidateAsync(usuario);
 
             if (!validarUser.IsValid)
                 return StatusCode(StatusCodes.Status400BadRequest, validarUser);
 
-            var UserUpdate = await _userService.GetByUsuario(user.Usuario);
+            var UserUpdate = await _userService.GetByUsuario(usuario.Usuario);
 
-            if ((UserUpdate is not null) && (UserUpdate.Id != user.Id))
+            if ((UserUpdate is not null) && (UserUpdate.Id != usuario.Id))
                 return BadRequest("O Usuário (e-mail) já está em uso por outro usuário.");
 
-            var Resposta = await _userService.Update(user);
+            var Resposta = await _userService.Update(usuario);
 
             if (Resposta is null)
                 return BadRequest("Usuário não encontrado!");
@@ -93,9 +93,9 @@ namespace blogpessoal.Controllers
 
         [AllowAnonymous]
         [HttpPost("logar")]
-        public async Task<ActionResult> Autenticar([FromBody] UserLogin userLogin)
+        public async Task<ActionResult> Autenticar([FromBody] UserLogin usuarioLogin)
         {
-            var Resposta = await _authService.Autenticar(userLogin);
+            var Resposta = await _authService.Autenticar(usuarioLogin);
 
             if (Resposta is null)
                 return Unauthorized("Usuário e/ou Senha inválidos!");

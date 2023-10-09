@@ -1,9 +1,4 @@
-﻿using blogpessoal.Model;
-using Newtonsoft.Json;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace blogpessoal.Model
+﻿namespace blogpessoal.Model
 {
     public class UserLogin
     {
@@ -15,8 +10,9 @@ namespace blogpessoal.Model
 
         public string Senha { get; set; } = string.Empty;
 
-        public string? Foto { get; set; } = string.Empty;
+        public string Foto { get; set; } = string.Empty;
 
         public string Token { get; set; } = string.Empty;
+
     }
 }

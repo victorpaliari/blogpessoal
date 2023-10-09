@@ -59,9 +59,9 @@ namespace blogpessoal.Service.Implements
 
         public async Task<User?> Create(User usuario)
         {
-            var BuscaUser = await GetByUsuario(usuario.Usuario);
+            var BuscaUsuario = await GetByUsuario(usuario.Usuario);
 
-            if (BuscaUser is not null)
+            if (BuscaUsuario is not null)
                 return null;
 
             if (usuario.Foto is null || usuario.Foto == "")
