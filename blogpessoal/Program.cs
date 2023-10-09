@@ -1,4 +1,4 @@
-
+﻿
 using blogpessoal.Configuration;
 using blogpessoal.Data;
 using blogpessoal.Model;
@@ -32,11 +32,11 @@ namespace blogpessoal
                     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                 });
 
-            // Conex?o com o Banco de dados
+            // Conex�o com o Banco de dados
 
             if (builder.Configuration["Enviroment:Start"] == "PROD")
             {
-                /* Conex?o Remota (Nuvem) - PostgreSQL */
+                /* Conex�o Remota (Nuvem) - PostgreSQL */
 
                 builder.Configuration
                 .SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("secrets.json");
@@ -51,7 +51,7 @@ namespace blogpessoal
             }
             else
             {
-                /* Conex?o Local - SQL Server */
+                /* Conex�o Local - SQL Server */
 
                 var connectionString = builder.Configuration.
                     GetConnectionString("DefaultConnection");
@@ -61,19 +61,19 @@ namespace blogpessoal
                 );
             }
 
-            // Registrar a Valida??o das Entidades
+            // Registrar a Valida��o das Entidades
             builder.Services.AddTransient<IValidator<Postagem>, PostagemValidator>();
             builder.Services.AddTransient<IValidator<Tema>, TemaValidator>();
             builder.Services.AddTransient<IValidator<User>, UserValidator>();
 
-            // Registrar as Classes de Servi?o (Service)
+            // Registrar as Classes de Servi�o (Service)
             builder.Services.AddScoped<IPostagemService, PostagemService>();
             builder.Services.AddScoped<ITemaService, TemaService>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IAuthService, AuthService>();
 
 
-            // Valida??o do Token
+            // Valida��o do Token
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -98,7 +98,7 @@ namespace blogpessoal
             builder.Services.AddSwaggerGen(options =>
             {
 
-                //Personalizar a P?gna inicial do Swagger
+                //Personalizar a P�gna inicial do Swagger
                 options.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Version = "v1",
@@ -106,30 +106,30 @@ namespace blogpessoal
                     Description = "Projeto Blog Pessoal - ASP.NET Core 7 - Entity Framework",
                     Contact = new OpenApiContact
                     {
-                        Name = "Rhyan Magalhaes",
-                        Email = "rhyan.magalhaes@outlook.com",
-                        Url = new Uri("https://github.com/paperspls/Blog_Pessoal_ASP.NET")
+                        Name = "Victor Paliari",
+                        Email = "victorrpaliari@gmail.com",
+                        Url = new Uri("https://github.com/victorpaliari")
                     },
                     License = new OpenApiLicense
                     {
                         Name = "Github",
-                        Url = new Uri("https://github.com/paperspls/Blog_Pessoal_ASP.NET")
+                        Url = new Uri("https://github.com/victorpaliari/blogpessoal")
                     }
 
                 });
 
-                //Adicionar a Seguran?a no Swagger
+                //Adicionar a Seguran�a no Swagger
                 options.AddSecurityDefinition("JWT", new OpenApiSecurityScheme
                 {
                     In = ParameterLocation.Header,
-                    Description = "Digite um Token JWT v?lido!",
+                    Description = "Digite um Token JWT v�lido!",
                     Name = "Authorization",
                     Type = SecuritySchemeType.Http,
                     BearerFormat = "JWT",
                     Scheme = "Bearer"
                 });
 
-                //Adicionar a configura??o visual da Seguran?a no Swagger
+                //Adicionar a configura��o visual da Seguran�a no Swagger
                 options.OperationFilter<AuthResponsesOperationFilter>();
 
             });
@@ -137,7 +137,7 @@ namespace blogpessoal
             // Adicionar o Fluent Validation no Swagger
             builder.Services.AddFluentValidationRulesToSwagger();
 
-            // Configura??o do CORS
+            // Configura��o do CORS
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy(name: "MyPolicy",
@@ -166,7 +166,7 @@ namespace blogpessoal
 
             app.UseSwaggerUI();
 
-            // Swagger como P?gina Inicial (Home) na Nuvem
+            // Swagger como P�gina Inicial (Home) na Nuvem
             if (app.Environment.IsProduction())
             {
                 app.UseSwaggerUI(c =>
